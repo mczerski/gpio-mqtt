@@ -39,7 +39,7 @@ class GPIO_MQTT:
             print('unknown command %s' % command)
 
     def _makeTopic(self, gpioPin):
-        return "/".join([self._rootTopic+'out', str(gpioPin)])
+        return "/".join([self._rootTopic+'out', str(gpioPin), 'state'])
 
     def _sendMessage(self, topic, payload):
         print('sending topic: %s. payload: %s' % (topic, payload))
