@@ -7,6 +7,6 @@ WantedBy=multi-user.target
 [Service]
 User=root
 Type=simple
-ExecStart=/usr/local/bin/gpio-mqtt.py
+ExecStart=/usr/local/bin/gpio-mqtt
 Restart=on-failure
 RestartSec=5
