@@ -10,7 +10,7 @@ import os
 class GPIO_MQTT:
     def __init__(self, brokerHost, brokerPort, rootTopic, gpioPins):
         self._rootTopic = rootTopic
-        self._mqttClient = mqtt.Client()
+        self._mqttClient = mqtt.Client(client_id='gpio', clean_session=False)
         self._mqttClient.on_connect = self._mqtt_on_connect
         self._mqttClient.on_message = self._mqtt_on_message
         self._brokerHost = brokerHost
@@ -43,7 +43,7 @@ class GPIO_MQTT:
 
     def _sendMessage(self, topic, payload):
         print('sending topic: %s. payload: %s' % (topic, payload))
-        self._mqttClient.publish(topic, payload)
+        self._mqttClient.publish(topic, payload, retain=True)
 
     def _sendGpioValue(self, gpioPin):
         value = str(self._gpioValues[gpioPin])
@@ -57,8 +57,7 @@ class GPIO_MQTT:
                 curr = gpio.read()
                 self._gpioValues[gpioPin] = curr
                 if prev != curr:
-                    topic = self._makeTopic(gpioPin)
-                    self._sendMessage(topic, str(curr))
+                    self._sendGpioValue(gpioPin)
             time.sleep(1)
 
     def run(self):
